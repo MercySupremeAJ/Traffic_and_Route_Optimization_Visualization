@@ -71,6 +71,7 @@ export default function App() {
   // Handle algorithm change
   const handleAlgorithmChange = useCallback((algoId) => {
     engine.reset();
+    engine.setSteps([]);
     setSelectedAlgorithm(algoId);
     const algo = ALGORITHMS[algoId];
     if (algo) {
