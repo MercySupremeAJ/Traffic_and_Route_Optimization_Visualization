@@ -117,6 +117,14 @@ export default function GraphView({ step, graph, startNode, endNode }) {
             </filter>
           </defs>
           <rect width={svgWidth} height={svgHeight} fill="url(#grid)" />
+          
+          {/* Lagos Map Label */}
+          <text x="15" y="22" className="map-label" fill="rgba(0,229,255,0.2)" fontSize="12" fontFamily="var(--font-mono)" fontWeight="700">
+            LAGOS CITY MAP
+          </text>
+          <text x={svgWidth - 15} y={svgHeight - 10} className="map-label" fill="rgba(255,255,255,0.08)" fontSize="10" fontFamily="var(--font-mono)" textAnchor="end">
+            Traffic & Route Optimizer
+          </text>
 
           {/* Edges */}
           {graph.edges.map((edge, i) => {
