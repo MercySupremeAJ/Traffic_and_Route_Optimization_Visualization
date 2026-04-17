@@ -18,6 +18,7 @@ import GraphView from './components/GraphView';
 import ComparisonView from './components/ComparisonView';
 import InfoPanel from './components/InfoPanel';
 import Footer from './components/Footer';
+import StatsBar from './components/StatsBar';
 
 import './App.css';
 
@@ -165,6 +166,13 @@ export default function App() {
 
         {/* Center: Visualization */}
         <section className="visualization-area" id="visualization-area">
+          <StatsBar
+            currentStep={engine.currentStep}
+            currentStepIndex={engine.currentStepIndex}
+            totalSteps={engine.totalSteps}
+            status={engine.status}
+            algorithmId={selectedAlgorithm}
+          />
           {comparisonMode ? (
             <ComparisonView data={data} viewMode={viewMode} />
           ) : viewMode === 'graph' || algorithm?.category === 'graph' ? (
