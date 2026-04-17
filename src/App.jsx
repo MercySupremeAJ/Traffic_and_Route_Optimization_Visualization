@@ -19,6 +19,7 @@ import ComparisonView from './components/ComparisonView';
 import InfoPanel from './components/InfoPanel';
 import Footer from './components/Footer';
 import StatsBar from './components/StatsBar';
+import WelcomeOverlay from './components/WelcomeOverlay';
 
 import './App.css';
 
@@ -137,6 +138,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <WelcomeOverlay />
       <Header />
       <main className="app-main">
         {/* Left Sidebar: Controls */}
