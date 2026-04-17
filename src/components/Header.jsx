@@ -17,7 +17,7 @@ export default function Header() {
               <span className="title-route">Route</span>
               <span className="title-main">Optimizer</span>
             </h1>
-            <p className="header-subtitle">Algorithm Visualization × Urban Mobility</p>
+            <p className="header-subtitle">Algorithm Visualization × Lagos Urban Mobility</p>
           </div>
         </div>
         <div className="header-badge">

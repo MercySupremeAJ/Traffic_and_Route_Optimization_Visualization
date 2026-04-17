@@ -4,11 +4,11 @@
  */
 
 const INTERSECTION_NAMES = [
-  'Central Station', 'Market Square', 'Tech Park', 'City Hall',
-  'Harbor Bridge', 'University', 'Airport', 'Stadium',
-  'Hospital', 'Mall', 'Library', 'Park Lane',
-  'Train Depot', 'Bus Terminal', 'Fire Station', 'Police HQ',
-  'Museum', 'Theater', 'Waterfront', 'Industrial Zone',
+  'Lekki Toll Gate', 'Victoria Island', 'Ikoyi Bridge', 'Ikeja GRA',
+  'Oshodi Junction', 'CMS Marina', 'Ajah Roundabout', 'Surulere Stadium',
+  'LUTH Hospital', 'Ikota Shopping', 'UNILAG Campus', 'Obalende Bus Stop',
+  'Apapa Wharf', 'Ojota Interchange', 'Yaba Tech', 'Epe Expressway',
+  'Third Mainland', 'Berger Junction', 'Iyana Ipaja', 'Mushin Market',
 ];
 
 /**

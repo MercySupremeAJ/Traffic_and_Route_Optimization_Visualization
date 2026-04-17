@@ -1,6 +1,6 @@
 # 🚦 Traffic & Route Optimization Visualizer
 
-> **An interactive algorithm visualization platform that transforms abstract computer science algorithms into real-world traffic and route optimization simulations.**
+> **An interactive algorithm visualization platform that transforms abstract computer science algorithms into real-world traffic and route optimization simulations — set in Lagos, Nigeria.**
 
 ![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat-square&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?style=flat-square&logo=vite)
@@ -13,12 +13,12 @@
 This project bridges the gap between **theoretical algorithms** and **practical real-world applications** by visualizing:
 
 - **Sorting algorithms** as traffic flow optimization (vehicles bubbling, merging, partitioning)
-- **Graph traversal algorithms** as route navigation across a city map (intersections, roads, traffic conditions)
+- **Graph traversal algorithms** as route navigation across a **Lagos city map** (intersections, roads, traffic conditions)
 
-Instead of traditional bar charts in isolation, users see algorithms operating in a **city-based simulation model** where:
-- 🟢 **Nodes** = Intersections (Stadium, Hospital, Tech Park, etc.)
-- 🔵 **Edges** = Roads connecting locations
-- 🟡 **Weights** = Traffic congestion levels (1–9)
+Instead of traditional bar charts in isolation, users see algorithms operating in a **Lagos-based simulation model** where:
+- 🟢 **Nodes** = Real Lagos intersections (Lekki Toll Gate, Victoria Island, Oshodi Junction, Third Mainland Bridge, etc.)
+- 🔵 **Edges** = Roads connecting locations across Lagos
+- 🟡 **Weights** = Traffic congestion levels (1–9, because Lagos traffic is legendary 🚗)
 
 ---
 
