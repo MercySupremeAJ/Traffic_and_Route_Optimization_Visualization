@@ -17,6 +17,7 @@ import BarView from './components/BarView';
 import GraphView from './components/GraphView';
 import ComparisonView from './components/ComparisonView';
 import InfoPanel from './components/InfoPanel';
+import Footer from './components/Footer';
 
 import './App.css';
 
@@ -190,6 +191,7 @@ export default function App() {
           />
         )}
       </main>
+      <Footer />
     </div>
   );
 }
