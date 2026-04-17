@@ -1,0 +1,142 @@
+.control-panel {
+  width: 280px;
+  min-width: 260px;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  overflow-y: auto;
+  animation: fadeInLeft 0.5s ease-out;
+  height: calc(100vh - 70px);
+  position: sticky;
+  top: 70px;
+}
+
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.control-hint {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Transport Controls */
+.transport-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+.btn-play {
+  flex: 1;
+  min-width: 100px;
+}
+
+/* Progress */
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progress-label {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.progress-percent {
+  font-size: var(--text-xs);
+  color: var(--accent-cyan);
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+/* Speed Slider */
+.speed-value {
+  color: var(--accent-cyan);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* View Toggle */
+.view-toggle {
+  display: flex;
+  gap: var(--space-xxs);
+}
+
+.view-btn {
+  flex: 1;
+  font-size: var(--text-xs);
+  padding: var(--space-xs);
+}
+
+.view-btn.active {
+  background: var(--accent-cyan-dim);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+/* Toggle Label */
+.toggle-label {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* Generate Button */
+.btn-generate {
+  width: 100%;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-card-hover));
+  border: 1px dashed var(--border-light);
+}
+
+.btn-generate:hover {
+  border-style: solid;
+  border-color: var(--accent-cyan);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .control-panel {
+    width: 100%;
+    height: auto;
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    padding: var(--space-md);
+  }
+
+  .control-section {
+    min-width: 200px;
+    flex: 1;
+  }
+
+  .divider {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .control-panel {
+    padding: var(--space-sm);
+  }
+  
+  .control-section {
+    min-width: 150px;
+  }
+}
