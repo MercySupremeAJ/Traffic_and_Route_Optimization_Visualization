@@ -1,181 +1,119 @@
 # 🚦 Traffic & Route Optimization Visualizer
 
-> **An interactive algorithm visualization platform that transforms abstract computer science algorithms into real-world traffic and route optimization simulations — set in Lagos, Nigeria.**
-
 ![React](https://img.shields.io/badge/React-19.x-61DAFB?style=flat-square&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?style=flat-square&logo=vite)
+![Architecture](https://img.shields.io/badge/Architecture-State_Machine-magenta?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
----
-
-## 🧠 Overview
-
-This project bridges the gap between **theoretical algorithms** and **practical real-world applications** by visualizing:
-
-- **Sorting algorithms** as traffic flow optimization (vehicles bubbling, merging, partitioning)
-- **Graph traversal algorithms** as route navigation across a **Lagos city map** (intersections, roads, traffic conditions)
-
-Instead of traditional bar charts in isolation, users see algorithms operating in a **Lagos-based simulation model** where:
-- 🟢 **Nodes** = Real Lagos intersections (Lekki Toll Gate, Victoria Island, Oshodi Junction, Third Mainland Bridge, etc.)
-- 🔵 **Edges** = Roads connecting locations across Lagos
-- 🟡 **Weights** = Traffic congestion levels (1–9, because Lagos traffic is legendary 🚗)
+A high-performance algorithmic visualizer simulating real-world urban mobility and route optimization logic, architected directly in React 19 without external charting dependencies. The visualization layer integrates a functional abstraction mapping theoretical algorithms to randomized urban intersection networks (contextualized in Lagos, Nigeria).
 
 ---
 
-## ✨ Features
+## 🏗 System Architecture
 
-### 🔹 7 Algorithm Simulations
-| Algorithm | Category | Traffic Metaphor |
-|-----------|----------|-----------------|
-| **Bubble Sort** | Sorting | Traffic Prioritization — vehicles bubble up by priority |
-| **Merge Sort** | Sorting | Traffic Redistribution — divide into lanes, merge efficiently |
-| **Quick Sort** | Sorting | Route Optimization — pivot intersection directs traffic |
-| **Binary Search** | Searching | Location Search — GPS-like narrowing down |
-| **BFS** | Graph | Layer-by-Layer Road Traversal — explore like ripples |
-| **DFS** | Graph | Deep Road Exploration — one path until dead end |
-| **Dijkstra** | Graph | Shortest Path Navigation — the GPS of algorithms |
+The application is engineered around a deterministic state-machine abstraction. Rather than tightly coupling rendering loops with algorithm execution, the architecture decouples logical computation from visual interpretation.
 
-### 🔹 Dual Visualization Modes
-- **📊 Bar View** — Classic bar chart with color-coded states (comparing, swapping, sorted, pivot)
-- **🗺️ Graph View** — SVG city map with labeled intersections, weighted roads, and animated path tracing
+### 1. Pre-computation Execution Engine
+Executing O(n²) or recursive functions concurrently with React state updates results in severe thread blocking and render stutter. 
 
-### 🔹 Interactive Controls
-- ▶ Play / ⏸ Pause / ↺ Reset / ⏭ Step Forward / ⏮ Step Back
-- ⚡ Adjustable speed slider (Lightning → Detailed)
-- 📏 Data size slider (6–40 elements)
-- ⌨️ Keyboard shortcuts: `Space` = Play/Pause, `← →` = Step, `R` = Reset
+Instead of yielding within a sorting loop, algorithms (pure functions) execute synchronously in milliseconds. During execution, they push immutable state snapshots onto a contiguous heap array mapping every single comparison, swap, distance relaxation, and queue shift.
+```javascript
+// Example Snapshot Output
+steps.push({
+    array: [...currentArrayState], // Instance state
+    comparing: [i, j],             // Active pointers
+    statusDelta: "Comparing traffic loads"
+});
+```
+The React layer then acts strictly as a "video player" consuming this dataset via a centralized temporal index pointer.
 
-### 🔹 Learning Enhancements
-- 📝 **Pseudocode Viewer** — Toggle between English, JavaScript, and Python with active line highlighting
-- 📊 **Complexity Display** — Color-coded badges for Best/Avg/Worst time + space complexity
-- 🎨 **Dynamic Legend** — Adapts to the current algorithm and view mode
-- ⚔️ **Side-by-Side Comparison** — Run two algorithms simultaneously on the same data
+### 2. State Machine (`useReducer` Hook)
+The animation lifecycle is governed by a `useReducer` hook maintaining atomic, predictable transitions.
+* **IDLE:** Data is loaded; temporal pointer is at 0.
+* **RUNNING:** `useEffect` spawns a `setInterval` tracking `stepIndex++`. A `useRef` retains the interval pointer for instant garbage collection on interrupts.
+* **PAUSED:** Interval is destroyed; temporal state freeze.
+* **COMPLETE:** Temporal pointer equals snapshot array length; metrics finalized.
 
----
-
-## 🛠️ Tech Stack
-
-| Technology | Purpose |
-|-----------|---------|
-| **React 19** | UI framework with functional components & hooks |
-| **Vite 8** | Build tool & dev server |
-| **CSS3** | Custom design system with CSS variables, glassmorphism |
-| **SVG** | Graph visualization (no D3/canvas dependencies) |
-| **useReducer** | Animation state machine (IDLE → RUNNING → PAUSED → COMPLETE) |
-
-### Key Architecture Decisions
-1. **Precomputed Steps** — All algorithm steps generated before animation starts for smooth playback
-2. **State Machine** — `useReducer` manages animation lifecycle with predictable transitions
-3. **Modular Algorithms** — Each algorithm is an independent module returning step arrays
-4. **Zero External Dependencies** — Pure React + CSS + SVG for maximum simplicity
+### 3. SVG vs Canvas DOM Layering
+For the Graph Network (City Map), we utilize direct SVG injection rather than HTML5 `<canvas>`.
+* **Why SVG?** Nodes (`<circle>`) and edges (`<line>`) exist natively in the DOM. This strictly isolates styling concerns; instead of complex canvas redraws on tick, we simply mutate `className` bindings directly from the state step.
+* Heavy CSS optimization (e.g., `<feGaussianBlur>` filters for Route Selection glowing) is handled by the GPU asynchronously rather than polluting the JS runtime.
 
 ---
 
-## 🚀 Getting Started
+## 🧠 Algorithmic Implementations
 
-### Prerequisites
-- Node.js 18+ and npm
+The engine supports 7 independent algorithms mapped across two distinct rendering planes.
 
-### Installation
+### Plane A: Sorting Visualization (Bar View)
+Metaphor: *Traffic Prioritization and Lane Redistributing*
+* **Bubble Sort** (O(n²)): Analyzed for basic adjacent memory pointer transitions.
+* **Merge Sort** (O(n log n)): Visualizes recursive divide-and-conquer sub-array unrolling. 
+* **Quick Sort** (O(n log n)): Implements a high-partition logic, bounding values over a chosen pivot.
 
+### Plane B: Graph Traversal (City Map View)
+Metaphor: *GPS Network Analysis across Intersections (Nodes) and Road Congestion Constraints (Edge Weights).*
+* **Breadth-First Search (BFS):** Strict Queue (FIFO) logic mapping unweighted layer-by-layer radial expansion.
+* **Depth-First Search (DFS):** Stack (LIFO) behavior running deep pathing traces into dead-ends before initiating localized backtracking.
+* **Dijkstra's Algorithm:** Priority Queue-driven weighted graph evaluation. Constantly mapping optimal deltas from Source to Vertex, illustrating dynamic "edge relaxation" whenever a structurally faster route mitigates heavy traffic metrics.
+
+---
+
+## 🛠 Feature Specifications
+
+* **Side-by-Side Concurrency Pipeline:** Instantiating the `useAlgorithm` engine hook twice allows asynchronous execution of two wholly independent algorithmic variants on a shared data heap for direct performance benchmarking.
+* **Metadata Parsing & Reflection:** A centralized JSON-style object exposes O-notation constants and implementation pseudocode arrays across Python, JS, C, and raw English bindings.
+* **Time Complexity Scaling:** User-driven DOM throttler (Speed Slider) scales interval delays recursively down to 50ms (Lightning logic trace) scaling dynamically scaling up to 1000ms (Frame-by-frame debug trace).
+
+---
+
+## 🚀 Setup & Initialization
+
+### Requirements
+- Node.js environment (v18+)
+
+### Pipeline
 ```bash
 # Clone the repository
 git clone https://github.com/MercySupremeAJ/Traffic_and_Route_Optimization_Visualization.git
 
-# Navigate to project directory
+# Navigate and install
 cd Traffic_and_Route_Optimization_Visualization
-
-# Install dependencies
 npm install
 
-# Start development server
+# Initialize development instance
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Server compiles via Vite and mounts on `http://localhost:5173`. 
 
-### Production Build
-
+### Production Compilation
 ```bash
 npm run build
 npm run preview
 ```
+Yields a massively minified static asset bundle optimized for low latency mounting.
 
 ---
 
-## 📂 Project Structure
+## 📁 Core Directory Map
 
-```
+```text
 src/
-├── algorithms/              # Pure algorithm step generators
-│   ├── sorting/             # Bubble Sort, Merge Sort, Quick Sort
-│   ├── searching/           # Binary Search
-│   ├── graph/               # BFS, DFS, Dijkstra
-│   └── metadata.js          # Complexity info, pseudocode, descriptions
+├── algorithms/              # Independent logical execution matrices
+│   ├── sorting/             # Array mutation snapshots
+│   ├── graph/               # Matrix queue/stack snapshot traces
+│   └── metadata.js          # Shared memory constants & Pseudo Registry
 ├── hooks/
-│   ├── useAlgorithm.js      # Animation state machine (useReducer)
-│   └── useGraphData.js      # City graph state management
-├── utils/
-│   ├── arrayGenerator.js    # Random/sorted array generation
-│   └── graphGenerator.js    # Connected city graph generation
-├── components/
-│   ├── Header.jsx           # App header with animated traffic light
-│   ├── ControlPanel.jsx     # Algorithm selector + transport controls
-│   ├── BarView.jsx          # Bar chart visualization
-│   ├── GraphView.jsx        # SVG city map visualization
-│   ├── ComparisonView.jsx   # Side-by-side algorithm comparison
-│   ├── PseudocodeViewer.jsx # Multi-language pseudocode display
-│   ├── ComplexityDisplay.jsx # Time/space complexity badges
-│   ├── InfoPanel.jsx        # Right sidebar container
-│   └── Legend.jsx           # Dynamic color legend
-├── App.jsx                  # Root orchestrator
-├── App.css                  # Layout styles
-├── index.css                # Design system & global styles
-└── main.jsx                 # Entry point
+│   ├── useAlgorithm.js      # Primary State Machine
+│   └── useGraphData.js      # Graph Network randomized generator mapped to Lagos Points
+├── components/              # View layer integrations 
+│   ├── ComparisonView.jsx   # Concurrent split-DOM wrapper
+│   ├── GraphView.jsx        # Direct SVG DOM injector
+│   └── PseudocodeViewer.jsx # Live-line code tracker
+└── App.jsx                  # Master Orchestrator Component
 ```
 
 ---
 
-## 🎨 Design System
-
-The app uses a **dark cyberpunk/neon traffic theme** with:
-- 🌑 Deep navy backgrounds (#0a0e1a, #121829)
-- 💠 Neon cyan accents (#00e5ff)
-- 💜 Magenta highlights (#ff006e)
-- 🟡 Traffic amber (#ffb700)
-- 🟢 Go green (#00e676)
-- 🔴 Stop red (#ff1744)
-- Glassmorphism panels with backdrop blur
-- Micro-animations (pulse, glow, swap flash)
-- Google Fonts: Inter, JetBrains Mono, Outfit
-
----
-
-## 📈 Future Improvements
-
-- 🗺️ Integration with real map APIs (OpenStreetMap, Google Maps)
-- 🤖 AI-based traffic prediction
-- 🏙️ 3D visualization of city models
-- 📱 Mobile-optimized responsive design
-- 🎓 Tutorial mode with guided walkthroughs
-- 📊 Performance benchmarking dashboard
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/new-algorithm`)
-3. Commit changes (`git commit -m 'Add new algorithm'`)
-4. Push to branch (`git push origin feature/new-algorithm`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
----
-
-**Built with ❤️ by MercySupremeAJ**
+*Architected and Engineered by **MercySupremeAJ***
